@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,600');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css');
+body {
+    margin: 0;
+}
+
+.home-center {
+    background: #1c1c1c;
+    font-family: 'Raleway', sans-serif;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.home-center-content {
+    text-align: center;
+    font-size: 80px;
+    color: white;
+}
+
+.home-center-content a:hover, .home-center-content a:visited, .home-center-content a:active, .home-center-content a {
+    text-decoration: none !important;
+    color: white;
+}
+
+.container {
+    padding-top: 20px;
+}
+
+.alert {
+    margin-top: 15px;
+}
+
+.nav-tabs {
+    margin-top: 20px;
+}
+
+.form-nicer {
+    max-width: 85%;
+    align-items: center;
+    text-align: center;
+    margin: 1rem auto;
+}
+
+.adminlogintext {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.downloadtext {
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.options-button:focus, .options-button:hover, .options-button {
+    text-decoration: none;
+}
+
+.fa-eye, .fa-trash {
+    margin-right: 5px;
+}
+
+.delete-button:hover, .delete-button:focus {
+    cursor: pointer;
+}
+
+.delete-button {
+    color: red;
+    margin-left: 10px;
+}
+
+.delete-button:focus, .delete-button:hover {
+    color: darkred;
+}
+
+.configtextarea {
+    width: 100%;
+    resize: none;
+    border: 2px solid black;
+    overflow: hidden;
+}

@@ -1,0 +1,31 @@
+{
+    "site": {
+        "port": 8547,
+        "adminDiscordIds": [""],
+        "shortUrlEndpoint": "https://dexter.cx/go",
+        "screenshotUrlEndpoint": "https://dexter.cx/i",
+        "screenshotDeleteEndpoint": "https://dexter.cx/api/delete",
+        "websocketUrl": "https://ws.dexter.cx/",
+        "session": {
+            "secret": "supersecret"
+        }
+    },
+    "database": {
+        "db": "",
+        "url": "",
+        "port": 43666,
+        "username": "",
+        "password": ""
+    },
+    "websocket": {
+        "port": "1120"
+    },
+    "discordPassport": {
+        "clientId": "",
+        "clientSecret": "",
+        "callbackUrl": "https://dexter.cx/auth/callback"
+    },
+    "fileUpload": {
+        "fileSizeLimit": "32000000"
+    }
+}

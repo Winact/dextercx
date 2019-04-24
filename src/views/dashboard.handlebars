@@ -1,0 +1,170 @@
+{{#section 'head'}}
+<script src="https://dexter.cx/static/js/dashboard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+{{/section}}
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Dashboard</a>
+    </nav>
+    <div class="alerts" id="alerts">
+        {{#if messages.success}}
+        <div class="alert alert-success" role="alert">
+            {{messages.success}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {{/if}}
+
+        {{#if messages.error}}
+        <div class="alert alert-danger" role="alert">
+            {{messages.error}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {{/if}}
+    </div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="url-tab" data-toggle="tab" href="#url" class="url" role="tab"
+                aria-controls="url" aria-selected="true">Url Shortner</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="screenshots-tab" data-toggle="tab" href="#screenshots" class="screenshot" role="tab"
+                aria-controls="screenshots" aria-selected="false">Screenshots</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" class="settings" role="tab"
+                aria-controls="settings" aria-selected="false">Settings</a>
+        </li>
+    </ul>
+
+    {{!-- URL --}}
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="url" role="tabpanel" aria-labelledby="url-tab">
+            <div class="container">
+                <div class="form-center">
+                    <h4 class="text-center">Create a new short URL:</h4>
+                    <p class="text-center text-muted">Get rid of those nasty urls.</p>
+                    <form action="/api/shorten" method="POST" novalidate>
+                        <div class="form-group">
+                            {{!-- <label for="url">Long URL</label> --}}
+                            <input name="url" type="text" class="form-control" id="long_url"
+                                placeholder="Long url to shorten">
+                        </div>
+                        <div class="form-group">
+                            {{!-- <label for="short">Short URL Name</label> --}}
+                            <input name="short" type="text" class="form-control" id="short_name"
+                                placeholder="URL Short Name">
+                        </div>
+                        <button type="submit" class="btn btn-login btn-primary btn-block">Shorten</button>
+                    </form>
+                    <br>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Shortened URL</th>
+                                <th scope="col">Long URL</th>
+                                <th scope="col">Clicks</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each shortened}}
+                            <tr>
+                                <td>{{shortUrl}}</td>
+                                <td><a href="{{url}}">{{url}}</a></td>
+                                <td><a href="{{longUrl}}">{{longUrl}}</a></td>
+                                <td>{{clicks}}</td>
+                                <td>
+                                    <a href="https://dexter.cx/api/shorten/delete/{{shortUrl}}">
+                                        <i class="fas fa-trash options-button delete-button"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Screenshots --}}
+        <div class="tab-pane fade" id="screenshots" role="tabpanel" aria-labelledby="screenshots-tab">
+            <div class="container">
+                <h4 class="text-center">Your ShareX Config:</h4>
+                <p class="text-center text-muted">Click in the box, 'Cntrl + A' to select all then copy or just click
+                    download.</p>
+                <textarea class="configtextarea" rows="3" readonly>{
+    "DestinationType": "ImageUploader",
+    "RequestMethod": "POST",
+    "RequestURL": "https://dexter.cx/api/upload",
+    "Headers": {
+        "authorization": "{{authToken}}"
+    },
+    "Body": "MultipartFormData",
+    "FileFormName": "file",
+    "URL": "$json:url$",
+    "ThumbnailURL": "$json:url$",
+    "DeletionURL": "$json:delete_url$"
+}
+                </textarea><br>
+                <p class="text-right downloadtext">
+                    <a href="javascript:download()">
+                        Download
+                    </a>
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">URL</th>
+                            <th scope="col">Views</th>
+                            <th scope="col">Filesize</th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each screenshots}}
+                        <tr>
+                            <td>{{id}}</td>
+                            <td><a href="{{url}}">{{url}}</a></td>
+                            <td>{{views}}</td>
+                            <td>{{filesize}}</td>
+                            <td>
+                                <a href="https://dexter.cx/api/delete/{{id}}">
+                                    <i class="fas fa-trash options-button delete-button"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{!-- Settings --}}
+        <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+            <div class="container">
+                <div class="resetToken">
+                    <h4>Reset Token: </h4>
+                    <p class="text-muted">Resetting your token means you will have to change the authorization header on
+                        ShareX or re-download the config.</p>
+                    <form action="/api/token/reset" method="GET">
+                        <button type="submit" class="btn btn-danger">Reset</button>
+                    </form>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var variables = { token: "{{authToken}}", websocketUrl: "{{config.websocket}}" }
+</script>
